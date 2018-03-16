@@ -44,8 +44,8 @@ class P3dfft(AutotoolsPackage):
     depends_on('automake', type='build')
     depends_on('libtool', type='build')
 
-    # autoreconf_extra_args = ['-fvi']
-    # force_autoreconf = True
+    #  autoreconf_extra_args = ['-fvi']
+    #  force_autoreconf = True
 
     def autoreconf(self, spec, prefix):
         libtoolize()
@@ -62,8 +62,8 @@ class P3dfft(AutotoolsPackage):
         ]
 
         configure = Executable('./configure')
-        #  configure = Executable('../configure')
         configure(*options)
+        #  configure = Executable('../configure')
 
     #      if '+double' in spec['fftw']:
     #          with working_dir('double', create=True):

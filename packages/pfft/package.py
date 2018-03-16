@@ -23,6 +23,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
 from spack import *
+import os
 
 
 class Pfft(AutotoolsPackage):
@@ -38,15 +39,14 @@ class Pfft(AutotoolsPackage):
 
     depends_on('fftw+mpi+pfft_patches')
     depends_on('mpi')
-
-    #  def autoreconf(self, spec, prefix):
-    #      bootstrap = Executable('./bootstrap.sh')
-    #      bootstrap()
+    #  bootstrap = Executable('./bootstrap.sh')
+    #  bootstrap()
 
     def configure(self, spec, prefix):
         options = ['--prefix={0}'.format(prefix)]
         options.extend("CC={0} MPICC={1}".format(
             self.compiler.cc, spec['mpi'].mpicc).split())
+        options.append("LDFLAGS=-L{0}".format(spec['mpi'].prefix.lib))
 
         if not self.compiler.f77 or not self.compiler.fc:
             options.append("--disable-fortran")
@@ -54,8 +54,7 @@ class Pfft(AutotoolsPackage):
             options.extend("FC={0} MPIFC={1}".format(
                 self.compiler.fc, spec['mpi'].mpifc).split())
 
-        #  bootstrap = Executable('./bootstrap.sh')
-        #  bootstrap()
+        options.append('--with-fftw3={0}'.format(spec['fftw'].prefix))
 
         configure = Executable('../configure')
 

@@ -14,7 +14,7 @@ This will add a new repository with the namespace `fluiddyn`.
 First install [Spack](https://github.com/spack/spack)
 
 ```sh
-  git clone https://github.com/fluiddyn/spack.git
+  git clone https://github.com/spack/spack.git
 ```
 
 Set the `.bashrc` or similar with the path to where you cloned `spack`.
@@ -27,8 +27,8 @@ Set the `.bashrc` or similar with the path to where you cloned `spack`.
 or atleast add `$SPACK_ROOT/bin` to the `$PATH` environment variable.
 
 Read more on how to [get started with
-Spack](https://spack.readthedocs.io/en/latest/getting_started.html)
-Some examples of useful `spack` commands::
+Spack](https://spack.readthedocs.io/en/latest/getting_started.html).
+Here are some examples of useful `spack` commands::
 
 ```sh
   # List and try to detect compilers 
@@ -47,4 +47,44 @@ Some examples of useful `spack` commands::
 
   # Clean temporary builds
   spack clean
+```
+
+## Configuration example
+
+```yaml
+# ~/.spack/packages.yml
+
+packages:
+  openmpi:
+    paths:
+      openmpi: /usr/
+  python:
+    paths:
+      python@3.6.4: /usr/
+    buildable: False
+  zlib:
+    paths:
+      zlib: /usr/
+  automake:
+    paths:
+      automake: /usr/
+  libtool:
+    paths:
+      libtool: /usr/
+  autoconf:
+    paths:
+      autoconf: /usr/
+  tcl:
+    paths:
+      tcl: /usr/
+```
+
+## Installation examples
+
+In ArchLinux
+
+```sh
+spack install fftw+openmp+pfft_patches
+spack install pfft ldflags="-L/usr/lib/openmpi" ^fftw/y4cx47m
+spack install p3dfft ^fftw/y4cx47m
 ```

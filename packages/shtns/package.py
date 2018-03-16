@@ -34,7 +34,9 @@ class Shtns(AutotoolsPackage, PythonPackage):
 
     homepage = "https://users.isterre.fr/nschaeff/SHTns"
     url      = "https://bitbucket.org/nschaeff/shtns/downloads/shtns-2.9-r597.tar.gz"
+    list_url = "https://bitbucket.org/nschaeff/shtns/downloads/"
 
+    version('3.0-r618', 'b2a3b1e1d661a3db7c5c214d6212aadd')
     version('2.9-r597', '7c2389a415cf5605b65298c2148eceec')
 
     variant('openmp', default=False, description="Enable OpenMP support.")
