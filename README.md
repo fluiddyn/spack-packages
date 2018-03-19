@@ -1,4 +1,7 @@
 # spack-packages
+
+[![Build Status](https://travis-ci.org/fluiddyn/spack-packages.svg?branch=master)](https://travis-ci.org/fluiddyn/spack-packages)
+
 A repository of spack packages for FluidDyn
 
 Assuming `spack` is already setup, to add this repo:

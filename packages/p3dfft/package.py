@@ -23,6 +23,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
 from spack import *
+import os
 
 
 class P3dfft(AutotoolsPackage):
@@ -38,7 +39,7 @@ class P3dfft(AutotoolsPackage):
 
     version('2.7.5', git=url, branch='master')
 
-    depends_on('fftw+mpi')
+    depends_on('fftw')
     depends_on('mpi')
     depends_on('autoconf', type='build')
     depends_on('automake', type='build')
@@ -63,36 +64,10 @@ class P3dfft(AutotoolsPackage):
 
         configure = Executable('./configure')
         configure(*options)
-        #  configure = Executable('../configure')
 
-    #      if '+double' in spec['fftw']:
-    #          with working_dir('double', create=True):
-    #              configure(*options)
-    #      if '+float' in spec['fftw']:
-    #          with working_dir('float', create=True):
-    #              configure('--enable-float', *options)
-    #
-    #  def build(self, spec, prefix):
-    #      if '+double' in spec['fftw']:
-    #          with working_dir('double'):
-    #              make()
-    #      if '+float' in spec['fftw']:
-    #          with working_dir('float'):
-    #              make()
-    #
-    #  def check(self):
-    #      spec = self.spec
-    #      if '+double' in spec['fftw']:
-    #          with working_dir('double'):
-    #              make("check")
-    #      if '+float' in spec['fftw']:
-    #          with working_dir('float'):
-    #              make("check")
-    #
-    #  def install(self, spec, prefix):
-    #      if '+double' in spec['fftw']:
-    #          with working_dir('double'):
-    #              make("install")
-    #      if '+float' in spec['fftw']:
-    #          with working_dir('float'):
-    #              make("install")
+    def build(self, spec, prefix):
+        options = [
+            'CC={0}'.format(spec['mpi'].mpicc),
+            'FC={0}'.format(spec['mpi'].mpifc),
+        ]
+        make(parallel=False, *options)
