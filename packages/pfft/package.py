@@ -44,15 +44,14 @@ class Pfft(AutotoolsPackage):
 
     def configure(self, spec, prefix):
         options = ['--prefix={0}'.format(prefix)]
-        options.extend("CC={0} MPICC={1}".format(
-            self.compiler.cc, spec['mpi'].mpicc).split())
-        options.append("LDFLAGS=-L{0}".format(spec['mpi'].prefix.lib))
+        options.extend("CC={0} MPICC={0}".format(
+            spec['mpi'].mpicc).split())
 
         if not self.compiler.f77 or not self.compiler.fc:
             options.append("--disable-fortran")
         else:
-            options.extend("FC={0} MPIFC={1}".format(
-                self.compiler.fc, spec['mpi'].mpifc).split())
+            options.extend("FC={0} MPIFC={0}".format(
+                spec['mpi'].mpifc).split())
 
         options.append('--with-fftw3={0}'.format(spec['fftw'].prefix))
 

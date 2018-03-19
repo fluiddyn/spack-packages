@@ -1,0 +1,82 @@
+#=============================================================================
+# Travis Project settings
+#=============================================================================
+language: python
+
+python:
+  - 3.6
+
+#=============================================================================
+# Environment
+#=============================================================================
+env:
+  global:
+    - SPACK_ROOT=$TRAVIS_BUILD_DIR/spack
+    - PATH=$SPACK_ROOT/bin:$PATH
+    # - OMPI_CC=/usr/bin/gcc-4.9
+    # - OMPI_CXX=/usr/bin/g++-4.9
+    # - OMPI_FC=/usr/bin/gfortran-4.9
+    - SPACK_SPEC_COMPILER="gcc@4.9"
+  matrix:
+    - SPACK_SPEC="pfft%$SPACK_SPEC_COMPILER"
+    - SPACK_SPEC="p3dfft%$SPACK_SPEC_COMPILER"
+    - SPACK_SPEC="shtns%$SPACK_SPEC_COMPILER"
+
+#=============================================================================
+# Common packages for devlopment build
+#=============================================================================
+addons:
+  apt:
+    sources: ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+      - gfortran-4.9
+      - build-essential
+      - automake
+      - autoconf
+      - libtool
+      - pkg-config
+      - make
+      - environment-modules
+
+#=============================================================================
+# Install software dependencies
+#=============================================================================
+install:
+  - cd $TRAVIS_BUILD_DIR
+  - git clone --depth 1 https://github.com/fluiddyn/spack.git -b develop
+  # config spack
+  - mkdir -p $HOME/.spack
+  - cp .ci/packages.travis.yaml $HOME/.spack/packages.yaml
+  # setup environment
+  - source $SPACK_ROOT/share/spack/setup-env.sh
+  - spack repo add .
+  # external packages are already installed from system, this will just register to spack
+  - spack install automake autoconf libtool pkg-config python@3
+  # - mpicc -showme
+  # - mpif90 -showme
+
+#=============================================================================
+# Building
+#=============================================================================
+script:
+
+  - echo "------- SPACK CONFIGURATIONS -------"
+  - spack compilers
+  - spack config get packages
+
+  - echo "------- INSTALL PACKAGES -------"
+  - spack spec -I ${SPACK_SPEC}
+  # travis_wait alternative hack
+  - nohup spack install -v -y ${SPACK_SPEC} > spack.log 2>&1 &
+  - while true; do tail spack.log; sleep 30; [ $(ps -P $! | wc -l) -eq 1 ] && break; done
+  - source $SPACK_ROOT/share/spack/setup-env.sh
+  - spack find -v
+
+#=============================================================================
+# Notifications
+#=============================================================================
+notifications:
+  email: false
+  irc: "chat.freenode.net#fluiddyn-dev"

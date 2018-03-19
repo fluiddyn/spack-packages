@@ -1,0 +1,33 @@
+packages:
+    tcl:
+      paths:
+        tcl: /usr/
+    # openmpi:
+    #     paths:
+    #         openmpi: /usr
+    #     buildable: False
+    autoconf:
+        paths:
+            autoconf: /usr
+        buildable: False
+    automake:
+        paths:
+            automake: /usr
+        buildable: False
+    pkg-config:
+        paths:
+            pkg-config: /usr
+        buildable: False
+    libtool:
+        paths:
+            libtool: /usr
+        buildable: False
+    python:
+        paths:
+            python@3.6.3: /opt/python/3.6.3
+        version: [3.6.3]
+        buildable: False
+    all:
+        compiler: [gcc]
+        # providers:
+        #     mpi: [openmpi]
